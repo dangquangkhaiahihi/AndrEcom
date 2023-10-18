@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.product;
+package com.allandroidprojects.ecomsample.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,19 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
-import com.allandroidprojects.ecomsample.fragments.ViewPagerActivity;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
-import com.allandroidprojects.ecomsample.options.CartListActivity;
-import com.allandroidprojects.ecomsample.startup.Item;
-import com.allandroidprojects.ecomsample.startup.MainActivity;
-import com.allandroidprojects.ecomsample.startup.SearchProduct;
-import com.allandroidprojects.ecomsample.startup.Word;
+import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.SearchProduct;
+import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class ItemDetailsActivity extends AppCompatActivity {

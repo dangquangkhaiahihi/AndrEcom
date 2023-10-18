@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.startup;
+package com.allandroidprojects.ecomsample.model;
 
 
 import java.util.ArrayList;

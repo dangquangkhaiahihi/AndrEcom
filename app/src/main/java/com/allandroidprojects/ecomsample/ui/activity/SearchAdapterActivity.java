@@ -1,5 +1,6 @@
-package com.allandroidprojects.ecomsample.options;
+package com.allandroidprojects.ecomsample.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -9,19 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
-import com.allandroidprojects.ecomsample.startup.Item;
-import com.allandroidprojects.ecomsample.startup.SearchProduct;
+import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.SearchProduct;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchAdapter  extends RecyclerView.Adapter<SearchAdapter.Holderview>{
+public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterActivity.Holderview>{
 
     // for itemdetails activity
     public static final String STRING_IMAGE_URI = "ImageUri";
@@ -37,7 +36,7 @@ public class SearchAdapter  extends RecyclerView.Adapter<SearchAdapter.Holdervie
     private List<Item> productlist;
     private Context context;
 
-    public SearchAdapter(List<Item> items, Context context)
+    public SearchAdapterActivity(List<Item> items, Context context)
     {
         productlist = items;
         this.context = context;
@@ -50,7 +49,7 @@ public class SearchAdapter  extends RecyclerView.Adapter<SearchAdapter.Holdervie
     }
 
     @Override
-    public void onBindViewHolder(Holderview holder, final int position) {
+    public void onBindViewHolder(Holderview holder, @SuppressLint("RecyclerView") final int position) {
 
         holder.itemImage.setImageResource(productlist.get(position).getItemImage());
         holder.itemName.setText(productlist.get(position).getItemName());

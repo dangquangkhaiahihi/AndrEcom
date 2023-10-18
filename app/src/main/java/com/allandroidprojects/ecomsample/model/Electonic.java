@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.startup;
+package com.allandroidprojects.ecomsample.model;
 
 public class Electonic extends SuperClass {
 

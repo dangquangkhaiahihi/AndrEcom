@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.options;
+package com.allandroidprojects.ecomsample.ui.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
 
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.options.DataMining.FrequentItemsetData;
-import com.allandroidprojects.ecomsample.startup.Item;
-import com.allandroidprojects.ecomsample.startup.SearchProduct;
+import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.SearchProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private FrequentItemsetData apriori;
 
     RecyclerView recyclerView;
-    SearchAdapter adapter;
+    SearchAdapterActivity adapter;
 
 
     SearchProduct products = new SearchProduct();
@@ -50,7 +50,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new SearchAdapter(productitems, SearchResultActivity.this);
+        adapter = new SearchAdapterActivity(productitems, SearchResultActivity.this);
         recyclerView.setAdapter(adapter);
 
 

@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.options;
+package com.allandroidprojects.ecomsample.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,16 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
-import com.allandroidprojects.ecomsample.startup.Word;
+import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_POSITION;
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_URI;

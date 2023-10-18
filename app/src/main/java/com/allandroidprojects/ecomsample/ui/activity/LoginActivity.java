@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.startup;
+package com.allandroidprojects.ecomsample.ui.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.allandroidprojects.ecomsample.R;
 
-public class MyAccount extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class MyAccount extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MyAccount.this, Registration.class));
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             }
         });
 
@@ -30,7 +30,7 @@ public class MyAccount extends AppCompatActivity {
 
             public void onClick(View view)
             {
-                startActivity(new Intent(MyAccount.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
         });

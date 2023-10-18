@@ -1,4 +1,4 @@
-package com.allandroidprojects.ecomsample.startup;
+package com.allandroidprojects.ecomsample.ui.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
 
-public class Registration extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class Registration extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Registration.this, MyAccount.class));
+                startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
             }
         });
 
@@ -32,7 +32,7 @@ public class Registration extends AppCompatActivity {
 
             public void onClick(View view)
             {
-                Toast.makeText(Registration.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistrationActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
             }
         });
 

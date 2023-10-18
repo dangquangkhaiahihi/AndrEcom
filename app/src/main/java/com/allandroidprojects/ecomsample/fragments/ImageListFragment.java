@@ -16,6 +16,7 @@
 
 package com.allandroidprojects.ecomsample.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,10 +31,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allandroidprojects.ecomsample.startup.*;
+import com.allandroidprojects.ecomsample.model.Electonic;
+import com.allandroidprojects.ecomsample.model.Offer;
+import com.allandroidprojects.ecomsample.model.SuperClass;
+import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.product.ItemDetailsActivity;
-import com.allandroidprojects.ecomsample.startup.MainActivity;
+import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
+import com.allandroidprojects.ecomsample.ui.activity.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -48,12 +52,8 @@ public class ImageListFragment extends Fragment {
     private static MainActivity mActivity;
 
 
-    public static  SuperClass details;
+    public static SuperClass details;
     public static List<Word> productlist;
-
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,26 +82,6 @@ public class ImageListFragment extends Fragment {
         }else if (ImageListFragment.this.getArguments().getInt("type") == 2){
             items =ImageUrlUtils.getElectronicsUrls();
             details = new Electonic();
-            productlist = details.getOffers();
-
-        }else if (ImageListFragment.this.getArguments().getInt("type") == 3){
-            items =ImageUrlUtils.getLifeStyleUrls();
-            details = new LifeStyle();
-            productlist = details.getOffers();
-
-        }else if (ImageListFragment.this.getArguments().getInt("type") == 4){
-            items =ImageUrlUtils.getHomeApplianceUrls();
-            details = new Home();
-            productlist = details.getOffers();
-
-        }else if (ImageListFragment.this.getArguments().getInt("type") == 5){
-            items =ImageUrlUtils.getBooksUrls();
-            details = new Book();
-            productlist = details.getOffers();
-
-        }else {
-            items = ImageUrlUtils.getImageUrls();
-            details = new More();
             productlist = details.getOffers();
 
         }
@@ -169,6 +149,7 @@ public class ImageListFragment extends Fragment {
             }
         }
 
+        @SuppressLint("RecyclerView")
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
