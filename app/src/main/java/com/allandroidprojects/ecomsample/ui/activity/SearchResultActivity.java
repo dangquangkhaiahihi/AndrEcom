@@ -19,7 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.options.DataMining.FrequentItemsetData;
 import com.allandroidprojects.ecomsample.model.Item;
 import com.allandroidprojects.ecomsample.model.SearchProduct;
 
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResultActivity extends AppCompatActivity {
-
-    private FrequentItemsetData apriori;
 
     RecyclerView recyclerView;
     SearchAdapterActivity adapter;

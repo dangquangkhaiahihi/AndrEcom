@@ -31,6 +31,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private String name;
     private String price;
     private String desc;
+    private String phone;
     private Word word;
 
     SearchProduct products = new SearchProduct();
@@ -73,7 +74,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
              if(name.equals("Red Party Dress")) {
                  position = 10;
                  suggest = true;
-
              }
 
              else  if(name.equals("Spring Outdoor cloth"))
@@ -81,26 +81,21 @@ public class ItemDetailsActivity extends AppCompatActivity {
                  position = 9;
                  suggest = true;
              }
-
-
              else if(name.equals("Sofa pillows"))
              {
                  position = 12;
                  suggest = true;
              }
-
              else if(name.contentEquals("Double White Bed"))
              {
                  position = 14;
                  suggest = true;
              }
-
              else if(name.contentEquals("Desktop Computer"))
              {
                  position = 7;
                  suggest = true;
              }
-
              else if(name.contentEquals("Samsung Phone"))
              {
                  position = 6;
@@ -125,7 +120,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
             }
 
-            word = new Word(name, desc, price);
+            word = new Word(name, desc, price, phone);
 
 
             productitems = products.getProductList();

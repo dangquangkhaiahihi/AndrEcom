@@ -7,14 +7,16 @@ public class Item {
     private String price;
     private int image;
     private String imageUrl;
+    private String phone;
 
-    public Item(String name, String desc, String price, int imageid, String url)
+    public Item(String name, String desc, String price, int imageid, String url, String phone)
     {
         this.name = name;
         this.desc = desc;
         this.price = price;
         this.image = imageid;
         this.imageUrl = url;
+        this.phone = phone;
     }
 
     // getter methods
@@ -60,5 +62,13 @@ public class Item {
 
     public void setItemImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

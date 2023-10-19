@@ -8,18 +8,18 @@ public class Word {
     private String name;
     private String desc;
     private String price;
+    private String phone;
 
     static ArrayList<Word> wishlist = new ArrayList<>();
     static ArrayList<Word> MyCard = new ArrayList<>();
 
-    public Word(String name, String desc, String price)
+    public Word(String name, String desc, String price, String phone)
     {
 
         this.name = name;
         this.desc = desc;
         this.price = price;
-
-    }
+        this.phone = phone;    }
 
     public Word()
     {

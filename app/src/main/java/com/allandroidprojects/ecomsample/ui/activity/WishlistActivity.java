@@ -1,5 +1,6 @@
 package com.allandroidprojects.ecomsample.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -102,7 +103,7 @@ public class WishlistActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final WishlistActivity.SimpleStringRecyclerViewAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final WishlistActivity.SimpleStringRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             final Uri uri = Uri.parse(mWishlistImageUri.get(position));
             holder.mImageView.setImageURI(uri);
 
