@@ -1,18 +1,18 @@
 package com.allandroidprojects.ecomsample.fakedata;
 
-import com.allandroidprojects.ecomsample.model.Word;
+import com.allandroidprojects.ecomsample.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListData {
 
-    protected final List<Word> words;
+    protected final List<Product> products;
 
     public ListData()
     {
-        words = new ArrayList<>();
+        products = new ArrayList<>();
     }
 
-    public List<Word> getData(){return words;};
+    public List<Product> getData(){return products;};
 }
