@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.model.Word;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -27,7 +27,7 @@ import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRI
 
 public class WishlistActivity extends AppCompatActivity {
     private static Context mContext;
-    private Word word;
+    private Product product;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +37,8 @@ public class WishlistActivity extends AppCompatActivity {
         ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
         ArrayList<String> wishlistImageUri =imageUrlUtils.getWishlistImageUri();
 
-        word = new Word();
-        ArrayList<Word> wishlistDetail = word.getWishlist();
+        product = new Product();
+        ArrayList<Product> wishlistDetail = product.getWishList();
 
 
 
@@ -55,7 +55,7 @@ public class WishlistActivity extends AppCompatActivity {
 
         private ArrayList<String> mWishlistImageUri;
         private RecyclerView mRecyclerView;
-        private ArrayList<Word> wishListDetails;
+        private ArrayList<Product> wishListDetails;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
@@ -79,7 +79,7 @@ public class WishlistActivity extends AppCompatActivity {
         }
 
         public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView,
-                                               ArrayList<String> wishlistImageUri, ArrayList<Word> wishlistDetail) {
+                                               ArrayList<String> wishlistImageUri, ArrayList<Product> wishlistDetail) {
             mWishlistImageUri = wishlistImageUri;
             mRecyclerView = recyclerView;
             this.wishListDetails = wishlistDetail;
@@ -107,15 +107,13 @@ public class WishlistActivity extends AppCompatActivity {
             final Uri uri = Uri.parse(mWishlistImageUri.get(position));
             holder.mImageView.setImageURI(uri);
 
-            holder.TexviewName.setText(wishListDetails.get(position).getWordName());
-            holder.TextviewDesc.setText(wishListDetails.get(position).getWordDesc());
-            holder.TextviewPrice.setText(wishListDetails.get(position).getWordPrice());
+            final String name = wishListDetails.get(position).getItemName();
+            final String price = wishListDetails.get(position).getItemPrice();
+            final String desc = wishListDetails.get(position).getItemDesc();
 
-
-            final String name = wishListDetails.get(position).getWordName();
-            final String price = wishListDetails.get(position).getWordPrice();
-            final String desc = wishListDetails.get(position).getWordDesc();
-
+            holder.TexviewName.setText(name);
+            holder.TextviewDesc.setText(desc);
+            holder.TextviewPrice.setText(price);
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +137,7 @@ public class WishlistActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
                     imageUrlUtils.removeWishlistImageUri(position);
-                    Word word = new Word();
+                    Product word = new Product();
                     word.removeWishList(position);
                     notifyDataSetChanged();
                 }

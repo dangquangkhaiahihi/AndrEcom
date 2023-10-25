@@ -34,8 +34,8 @@ import android.widget.Toast;
 import com.allandroidprojects.ecomsample.fakedata.CatData;
 import com.allandroidprojects.ecomsample.fakedata.DogData;
 import com.allandroidprojects.ecomsample.fakedata.ListData;
-import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
 import com.allandroidprojects.ecomsample.ui.activity.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
@@ -53,7 +53,7 @@ public class ImageListFragment extends Fragment {
 
 
     public static ListData details;
-    public static List<Word> productlist;
+    public static List<Product> productlist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class ImageListFragment extends Fragment {
 
         private String[] mValues;
         private RecyclerView mRecyclerView;
-        private List<Word> productdetials;
+        private List<Product> productdetials;
 
         // class viewholder of android;
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,7 +122,7 @@ public class ImageListFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, String[] items, List<Word> words) {
+        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, String[] items, List<Product> words) {
             mValues = items;
             mRecyclerView = recyclerView;
             productdetials = words;
@@ -150,13 +150,14 @@ public class ImageListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final Uri uri = Uri.parse(mValues[position]);
             holder.mImageView.setImageURI(uri);
-            holder.textView.setText(productdetials.get(position).getWordName());
-            holder.textViewDesc.setText(productdetials.get(position).getWordDesc());
-            holder.textViewPrice.setText(productdetials.get(position).getWordPrice());
 
-            final String name = productdetials.get(position).getWordName();
-            final String price = productdetials.get(position).getWordPrice();
-            final String desc = productdetials.get(position).getWordDesc();
+            final String name = productdetials.get(position).getItemDesc();
+            final String price = productdetials.get(position).getItemPrice();
+            final String desc = productdetials.get(position).getItemDesc();
+
+            holder.textView.setText(name);
+            holder.textViewDesc.setText(desc);
+            holder.textViewPrice.setText(price);
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,8 +181,8 @@ public class ImageListFragment extends Fragment {
                 ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
                 imageUrlUtils.addWishlistImageUri(mValues[position]);
 
-                Word word = new Word();
-                word.SetWishList(productdetials.get(position));
+                Product word = new Product();
+                word.setWishList(productdetials.get(position));
                 holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
                 notifyDataSetChanged();
                 Toast.makeText(mActivity,"Item added to Wishlist.",Toast.LENGTH_SHORT).show();

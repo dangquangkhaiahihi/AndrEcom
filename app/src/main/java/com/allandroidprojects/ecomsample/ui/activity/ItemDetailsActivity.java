@@ -14,7 +14,6 @@ import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.model.SearchProduct;
-import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -32,7 +31,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private String price;
     private String desc;
     private String phone;
-    private Word word;
+    private Product product;
 
     SearchProduct products = new SearchProduct();
     List<Product> productitems;
@@ -41,8 +40,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
     TextView itemName;
     TextView itemDesc;
     TextView itemPrice;
-
-    int productPosition;
 
     int position = -1;
 
@@ -65,9 +62,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
             imagePosition = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
             name = getIntent().getStringExtra("name");
             price = getIntent().getStringExtra("price");
+            phone = getIntent().getStringExtra("phone");
             desc = getIntent().getStringExtra("desc");
             Boolean flag = getIntent().getBooleanExtra("flag", false);
-            productPosition = getIntent().getIntExtra("position", -1);
 
             boolean suggest = false;
 
@@ -75,7 +72,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
                  position = 10;
                  suggest = true;
              }
-
              else  if(name.equals("Spring Outdoor cloth"))
              {
                  position = 9;
@@ -101,20 +97,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
                  position = 6;
                  suggest = true;
              }
-             else
-                 position = 0;
+             else position = 0;
 
-            if(flag & suggest)
-            {
+            if(flag & suggest) {
                 Desc_Layout.setVisibility(View.GONE);
             }
-
-
             else {
                 apriori_layout.setVisibility(View.GONE);
             }
 
-            word = new Word(name, desc, price, phone);
+            product = new Product(name, desc, price,stringImageUri, phone);
 
             productitems = products.getProductList();
 
@@ -123,11 +115,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemDesc = (TextView) findViewById(R.id.description_part);
             itemPrice = (TextView) findViewById(R.id.search_price);
 
-            itemImage.setImageResource(productitems.get(position).getItemImage());
+//            Glide.with(this).load(productitems.get(position).getItemImageUrl()).into(itemImage);
             itemName.setText(productitems.get(position).getItemName());
             itemDesc.setText(productitems.get(position).getItemDesc());
             itemPrice.setText(productitems.get(position).getItemPrice());
-
         }
 
         product_names.setText(name);
@@ -139,45 +130,38 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
             public void onClick(View view)
             {
-                Intent intent = getIntent();
-                intent.putExtra(STRING_IMAGE_URI, productitems.get(position).getItemImageUrl());
-                intent.putExtra(STRING_IMAGE_POSITION, position);
-                intent.putExtra("name", productitems.get(position).getItemName());
-                intent.putExtra("price", productitems.get(position).getItemPrice());
-                intent.putExtra("desc", productitems.get(position).getItemDesc());
-                intent.putExtra("flag", flagg);
-                intent.putExtra("position", position);
-                startActivity(intent);
-
+            Intent intent = getIntent();
+            intent.putExtra(STRING_IMAGE_URI, productitems.get(position).getItemImageUrl());
+            intent.putExtra(STRING_IMAGE_POSITION, position);
+            intent.putExtra("name", productitems.get(position).getItemName());
+            intent.putExtra("price", productitems.get(position).getItemPrice());
+            intent.putExtra("desc", productitems.get(position).getItemDesc());
+            intent.putExtra("flag", flagg);
+            intent.putExtra("position", position);
+            startActivity(intent);
             }
         });
-
-
 
         Uri uri = Uri.parse(stringImageUri);
         mImageView.setImageURI(uri);
 
-
         textViewAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
+            imageUrlUtils.addCartListImageUri(stringImageUri);
+            product.setCartList(product);
 
-                ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                imageUrlUtils.addCartListImageUri(stringImageUri);
-                word.SetMyCard(word);
-
-                Toast.makeText(ItemDetailsActivity.this,"Item added to cart.",Toast.LENGTH_SHORT).show();
-                MainActivity.notificationCountCart++;
-                NotificationCountSetClass.setNotifyCount(MainActivity.notificationCountCart);
+            Toast.makeText(ItemDetailsActivity.this,"Item added to cart.",Toast.LENGTH_SHORT).show();
+            MainActivity.notificationCountCart++;
+            NotificationCountSetClass.setNotifyCount(MainActivity.notificationCountCart);
             }
         });
 
         textViewBuyNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(ItemDetailsActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(ItemDetailsActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
             }
         });
 

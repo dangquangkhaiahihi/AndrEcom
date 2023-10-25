@@ -1,5 +1,6 @@
 package com.allandroidprojects.ecomsample.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.model.Word;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -36,8 +37,8 @@ public class CartListActivity extends AppCompatActivity {
         ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
         ArrayList<String> cartlistImageUri =imageUrlUtils.getCartListImageUri();
 
-        Word word = new Word();
-        ArrayList<Word> list = word.getMyCard();
+        Product product = new Product();
+        ArrayList<Product> list = product.getCartList();
 
 
 
@@ -55,7 +56,7 @@ public class CartListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private ArrayList<String> mCartlistImageUri;
-        private ArrayList<Word> wordDetails;
+        private ArrayList<Product> wordDetails;
         private RecyclerView mRecyclerView;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +80,7 @@ public class CartListActivity extends AppCompatActivity {
 
         public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView,
                                                ArrayList<String> wishlistImageUri,
-                                               ArrayList<Word> listitem) {
+                                               ArrayList<Product> listitem) {
             mCartlistImageUri = wishlistImageUri;
             mRecyclerView = recyclerView;
             wordDetails = listitem;
@@ -103,17 +104,17 @@ public class CartListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             final Uri uri = Uri.parse(mCartlistImageUri.get(position));
             holder.mImageView.setImageURI(uri);
 
-            holder.textViewName.setText(wordDetails.get(position).getWordName());
-            holder.textViewDesc.setText(wordDetails.get(position).getWordDesc());
-            holder.textViewPrice.setText(wordDetails.get(position).getWordPrice());
+            final String name = wordDetails.get(position).getItemName();
+            final String price = wordDetails.get(position).getItemPrice();
+            final String desc = wordDetails.get(position).getItemDesc();
 
-            final String name = wordDetails.get(position).getWordName();
-            final String price = wordDetails.get(position).getWordPrice();
-            final String desc = wordDetails.get(position).getWordDesc();
+            holder.textViewName.setText(name);
+            holder.textViewDesc.setText(desc);
+            holder.textViewPrice.setText(price);
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,8 +137,8 @@ public class CartListActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
                     imageUrlUtils.removeCartListImageUri(position);
-                    Word word = new Word();
-                    word.removeMyCard(position);
+                    Product product = new Product();
+                    product.removeFromCart(position);
                     notifyDataSetChanged();
                     //Decrease notification count
                     MainActivity.notificationCountCart--;

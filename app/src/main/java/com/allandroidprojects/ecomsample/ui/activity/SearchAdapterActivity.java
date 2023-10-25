@@ -49,7 +49,7 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
     @Override
     public void onBindViewHolder(Holderview holder, @SuppressLint("RecyclerView") final int position) {
 
-        holder.itemImage.setImageResource(productlist.get(position).getItemImage());
+//        holder.itemImage.setImageResource(productlist.get(position).getItemImageUrl());
         holder.itemName.setText(productlist.get(position).getItemName());
         holder.itemDesc.setText(productlist.get(position).getItemDesc());
         holder.itemPrice.setText("$ "+ productlist.get(position).getItemPrice());

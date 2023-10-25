@@ -1,20 +1,25 @@
 package com.allandroidprojects.ecomsample.model;
 
+import java.util.ArrayList;
+
 public class Product {
 
     private String name;
     private String desc;
     private String price;
-    private int image;
     private String imageUrl;
     private String phone;
 
-    public Product(String name, String desc, String price, int imageid, String url, String phone)
-    {
+    static ArrayList<Product> wishList = new ArrayList<>();
+    static ArrayList<Product> cartList = new ArrayList<>();
+
+    public Product() {
+    }
+
+    public Product(String name, String desc, String price, String url, String phone) {
         this.name = name;
         this.desc = desc;
         this.price = price;
-        this.image = imageid;
         this.imageUrl = url;
         this.phone = phone;
     }
@@ -32,17 +37,37 @@ public class Product {
         return price;
     }
 
-    public int getItemImage() {
-        return image;
-    }
-
     public String getItemImageUrl() {
         return imageUrl;
     }
 
+    public static ArrayList<Product> getWishList() {
+        return wishList;
+    }
 
+    public void setWishList(Product product) {
+        this.wishList.add(0, product);
+    }
 
-    // setter methods
+    public static ArrayList<Product> getCartList() {
+        return cartList;
+    }
+
+    public void setCartList(Product product) {
+        this.cartList.add(0, product);
+    }
+
+    public void removeFromCart(int position)
+    {
+        this.cartList.remove(position);
+    }
+
+    public void removeWishList(int position)
+    {
+        this.wishList.remove(position);
+    }
+
+// setter methods
 
     public void setItemName(String name) {
         this.name = name;
@@ -55,11 +80,6 @@ public class Product {
     public void setItemPrice(String price) {
         this.price = price;
     }
-
-    public void setItemImage(int image) {
-        this.image = image;
-    }
-
     public void setItemImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
