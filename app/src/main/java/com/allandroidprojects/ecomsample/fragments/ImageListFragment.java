@@ -31,9 +31,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allandroidprojects.ecomsample.model.Electonic;
-import com.allandroidprojects.ecomsample.model.Offer;
-import com.allandroidprojects.ecomsample.model.SuperClass;
+import com.allandroidprojects.ecomsample.fakedata.CatData;
+import com.allandroidprojects.ecomsample.fakedata.DogData;
+import com.allandroidprojects.ecomsample.fakedata.ListData;
 import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
@@ -52,7 +52,7 @@ public class ImageListFragment extends Fragment {
     private static MainActivity mActivity;
 
 
-    public static SuperClass details;
+    public static ListData details;
     public static List<Word> productlist;
 
     @Override
@@ -75,14 +75,13 @@ public class ImageListFragment extends Fragment {
         String[] items=null;
 
         if (ImageListFragment.this.getArguments().getInt("type") == 1){
-            items =ImageUrlUtils.getOffersUrls();
-            details = new Offer();
-            productlist = details.getOffers();
-
-        }else if (ImageListFragment.this.getArguments().getInt("type") == 2){
-            items =ImageUrlUtils.getElectronicsUrls();
-            details = new Electonic();
-            productlist = details.getOffers();
+            items = ImageUrlUtils.getOffersUrls();
+            details = new DogData();
+            productlist = details.getData();
+        } else if (ImageListFragment.this.getArguments().getInt("type") == 2){
+            items =ImageUrlUtils.getCatImgUrls();
+            details = new CatData();
+            productlist = details.getData();
 
         }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -123,10 +122,10 @@ public class ImageListFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, String[] items, List<Word> products) {
+        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, String[] items, List<Word> words) {
             mValues = items;
             mRecyclerView = recyclerView;
-            productdetials = products;
+            productdetials = words;
         }
 
 
@@ -136,8 +135,6 @@ public class ImageListFragment extends Fragment {
             return new ViewHolder(view);
         }
 
-
-
         @Override
         public void onViewRecycled(ViewHolder holder) {
             if (holder.mImageView.getController() != null) {
@@ -145,28 +142,21 @@ public class ImageListFragment extends Fragment {
             }
             if (holder.mImageView.getTopLevelDrawable() != null) {
                 holder.mImageView.getTopLevelDrawable().setCallback(null);
-//                ((BitmapDrawable) holder.mImageView.getTopLevelDrawable()).getBitmap().recycle();
             }
         }
 
         @SuppressLint("RecyclerView")
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-
-
             final Uri uri = Uri.parse(mValues[position]);
             holder.mImageView.setImageURI(uri);
             holder.textView.setText(productdetials.get(position).getWordName());
             holder.textViewDesc.setText(productdetials.get(position).getWordDesc());
             holder.textViewPrice.setText(productdetials.get(position).getWordPrice());
 
-
             final String name = productdetials.get(position).getWordName();
             final String price = productdetials.get(position).getWordPrice();
             final String desc = productdetials.get(position).getWordDesc();
-
-
-
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -183,24 +173,20 @@ public class ImageListFragment extends Fragment {
                 }
             });
 
-
-
             //Set click action for wishlist
             holder.mImageViewWishlist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                    imageUrlUtils.addWishlistImageUri(mValues[position]);
+                ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
+                imageUrlUtils.addWishlistImageUri(mValues[position]);
 
-                    Word word = new Word();
-                    word.SetWishList(productdetials.get(position));
-                    holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
-                    notifyDataSetChanged();
-                    Toast.makeText(mActivity,"Item added to Wishlist.",Toast.LENGTH_SHORT).show();
-
+                Word word = new Word();
+                word.SetWishList(productdetials.get(position));
+                holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
+                notifyDataSetChanged();
+                Toast.makeText(mActivity,"Item added to Wishlist.",Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
 
         @Override

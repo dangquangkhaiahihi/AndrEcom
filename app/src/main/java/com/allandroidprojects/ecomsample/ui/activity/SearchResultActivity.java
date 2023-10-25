@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.model.SearchProduct;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
     SearchProduct products = new SearchProduct();
-    List<Item> productitems;
+    List<Product> productitems;
 
 
     @Override
@@ -82,7 +82,7 @@ public class SearchResultActivity extends AppCompatActivity {
             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
                 String query = intent.getStringExtra(SearchManager.QUERY);
 
-                final List<Item> filterlist = listFilter(productitems, query);
+                final List<Product> filterlist = listFilter(productitems, query);
                 adapter.setFilter(filterlist);
                 //use the query to search your data somehow
             }
@@ -91,16 +91,12 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
 
-    private List<Item> listFilter(List<Item> list, String query)
+    private List<Product> listFilter(List<Product> list, String query)
     {
         query = query.toLowerCase();
-        final List<Item> filterModeList = new ArrayList<>();
+        final List<Product> filterModeList = new ArrayList<>();
 
-
-
-
-
-        for(Item item: list)
+        for(Product item: list)
         {
             final String name = item.getItemName().toLowerCase();
 
@@ -116,12 +112,12 @@ public class SearchResultActivity extends AppCompatActivity {
                 filterModeList.add(item);
             }
 
-        }// end of for
+        }
 
 
         return filterModeList;
 
-    }// end of method filter;
+    }
 
 
 

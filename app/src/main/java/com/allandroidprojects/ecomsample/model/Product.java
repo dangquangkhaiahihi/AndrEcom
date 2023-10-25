@@ -1,6 +1,6 @@
 package com.allandroidprojects.ecomsample.model;
 
-public class Item {
+public class Product {
 
     private String name;
     private String desc;
@@ -9,7 +9,7 @@ public class Item {
     private String imageUrl;
     private String phone;
 
-    public Item(String name, String desc, String price, int imageid, String url, String phone)
+    public Product(String name, String desc, String price, int imageid, String url, String phone)
     {
         this.name = name;
         this.desc = desc;

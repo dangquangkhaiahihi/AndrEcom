@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.model.SearchProduct;
 
 import java.util.ArrayList;
@@ -22,21 +22,19 @@ import java.util.List;
 
 public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterActivity.Holderview>{
 
-    // for itemdetails activity
     public static final String STRING_IMAGE_URI = "ImageUri";
     public static final String STRING_IMAGE_POSITION = "ImagePosition";
-    // end of that.
 
     SearchProduct products = new SearchProduct();
-    List<Item> productOriginal =  products.getProductList();
+    List<Product> productOriginal =  products.getProductList();
 
     int newposition;
 
 
-    private List<Item> productlist;
+    private List<Product> productlist;
     private Context context;
 
-    public SearchAdapterActivity(List<Item> items, Context context)
+    public SearchAdapterActivity(List<Product> items, Context context)
     {
         productlist = items;
         this.context = context;
@@ -91,28 +89,21 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
         });
 
 
-    }// end of method onBindViewHolder
+    }
 
 
     @Override
     public int getItemCount() {
         return productlist.size();
-    }// end of method getItemCount;
+    }
 
-
-    // method to filter;
-    public void setFilter(List<Item> items)
+    public void setFilter(List<Product> items)
     {
         productlist = new ArrayList<>();
         productlist.addAll(items);
         notifyDataSetChanged();
-    }// end of method setFilter
+    }
 
-
-
-
-
-    // HolderView Class Declaration
     class Holderview extends RecyclerView.ViewHolder
     {
 
@@ -132,6 +123,5 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
             itemPrice = (TextView) itemview.findViewById(R.id.search_price);
             linearLayout = (LinearLayout) itemview.findViewById(R.id.Search_layout);
         }
-    }// end of class HolderView
-
+    }
 }

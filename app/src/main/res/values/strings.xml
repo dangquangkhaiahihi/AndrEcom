@@ -10,8 +10,8 @@
     <string name="action_cart">Cart</string>
     <string name="action_notifications">Notifications</string>
 
-    <string name="item_1">Offers</string>
-    <string name="item_2">Electronics</string>
+    <string name="item_1">Dogs</string>
+    <string name="item_2">Cats</string>
 
     <string name="my_profile">My Profile</string>
     <string name="my_rewards">My Rewards</string>

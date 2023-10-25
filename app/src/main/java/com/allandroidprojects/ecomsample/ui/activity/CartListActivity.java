@@ -55,7 +55,7 @@ public class CartListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private ArrayList<String> mCartlistImageUri;
-        private ArrayList<Word> productDetails;
+        private ArrayList<Word> wordDetails;
         private RecyclerView mRecyclerView;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +82,7 @@ public class CartListActivity extends AppCompatActivity {
                                                ArrayList<Word> listitem) {
             mCartlistImageUri = wishlistImageUri;
             mRecyclerView = recyclerView;
-            productDetails = listitem;
+            wordDetails = listitem;
         }
 
         @Override
@@ -107,13 +107,13 @@ public class CartListActivity extends AppCompatActivity {
             final Uri uri = Uri.parse(mCartlistImageUri.get(position));
             holder.mImageView.setImageURI(uri);
 
-            holder.textViewName.setText(productDetails.get(position).getWordName());
-            holder.textViewDesc.setText(productDetails.get(position).getWordDesc());
-            holder.textViewPrice.setText(productDetails.get(position).getWordPrice());
+            holder.textViewName.setText(wordDetails.get(position).getWordName());
+            holder.textViewDesc.setText(wordDetails.get(position).getWordDesc());
+            holder.textViewPrice.setText(wordDetails.get(position).getWordPrice());
 
-            final String name = productDetails.get(position).getWordName();
-            final String price = productDetails.get(position).getWordPrice();
-            final String desc = productDetails.get(position).getWordDesc();
+            final String name = wordDetails.get(position).getWordName();
+            final String price = wordDetails.get(position).getWordPrice();
+            final String desc = wordDetails.get(position).getWordDesc();
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override

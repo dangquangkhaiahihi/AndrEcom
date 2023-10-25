@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
-import com.allandroidprojects.ecomsample.model.Item;
+import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.model.SearchProduct;
 import com.allandroidprojects.ecomsample.model.Word;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
@@ -35,7 +35,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private Word word;
 
     SearchProduct products = new SearchProduct();
-    List<Item> productitems;
+    List<Product> productitems;
 
     ImageView itemImage;
     TextView itemName;
@@ -67,7 +67,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             price = getIntent().getStringExtra("price");
             desc = getIntent().getStringExtra("desc");
             Boolean flag = getIntent().getBooleanExtra("flag", false);
-             productPosition = getIntent().getIntExtra("position", -1);
+            productPosition = getIntent().getIntExtra("position", -1);
 
             boolean suggest = false;
 
@@ -101,12 +101,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
                  position = 6;
                  suggest = true;
              }
-
              else
                  position = 0;
-
-
-
 
             if(flag & suggest)
             {
@@ -115,13 +111,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 
             else {
-
                 apriori_layout.setVisibility(View.GONE);
-
             }
 
             word = new Word(name, desc, price, phone);
-
 
             productitems = products.getProductList();
 
@@ -130,13 +123,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemDesc = (TextView) findViewById(R.id.description_part);
             itemPrice = (TextView) findViewById(R.id.search_price);
 
-
-
-
             itemImage.setImageResource(productitems.get(position).getItemImage());
             itemName.setText(productitems.get(position).getItemName());
             itemDesc.setText(productitems.get(position).getItemDesc());
-            itemPrice.setText("$ "+ productitems.get(position).getItemPrice());
+            itemPrice.setText(productitems.get(position).getItemPrice());
 
         }
 
