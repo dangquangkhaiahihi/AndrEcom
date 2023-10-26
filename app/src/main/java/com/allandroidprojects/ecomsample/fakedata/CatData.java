@@ -2,7 +2,7 @@ package com.allandroidprojects.ecomsample.fakedata;
 
 import com.allandroidprojects.ecomsample.model.Product;
 
-public class CatData extends ListData {
+public class CatData extends ListProductData {
 
     public CatData()
     {

@@ -5,11 +5,11 @@ import com.allandroidprojects.ecomsample.model.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListData {
+public class ListProductData {
 
     protected final List<Product> products;
 
-    public ListData()
+    public ListProductData()
     {
         products = new ArrayList<>();
     }

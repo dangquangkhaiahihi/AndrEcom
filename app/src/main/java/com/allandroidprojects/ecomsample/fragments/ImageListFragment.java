@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.allandroidprojects.ecomsample.fragments;
 
 import android.annotation.SuppressLint;
@@ -31,16 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.fakedata.CatData;
 import com.allandroidprojects.ecomsample.fakedata.DogData;
-import com.allandroidprojects.ecomsample.fakedata.ListData;
-import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.fakedata.ListProductData;
 import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
 import com.allandroidprojects.ecomsample.ui.activity.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
-
 
 import java.util.List;
 
@@ -52,7 +35,7 @@ public class ImageListFragment extends Fragment {
     private static MainActivity mActivity;
 
 
-    public static ListData details;
+    public static ListProductData listData;
     public static List<Product> productlist;
 
     @Override
@@ -71,31 +54,24 @@ public class ImageListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-
-        String[] items=null;
-
-        if (ImageListFragment.this.getArguments().getInt("type") == 1){
-            items = ImageUrlUtils.getOffersUrls();
-            details = new DogData();
-            productlist = details.getData();
-        } else if (ImageListFragment.this.getArguments().getInt("type") == 2){
-            items =ImageUrlUtils.getCatImgUrls();
-            details = new CatData();
-            productlist = details.getData();
+        if (ImageListFragment.this.getArguments().getInt("type") == 1) {
+            listData = new DogData();
+            productlist = listData.getData();
+        } else if (ImageListFragment.this.getArguments().getInt("type") == 2) {
+            listData = new CatData();
+            productlist = listData.getData();
 
         }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(recyclerView, items, productlist));
+        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(recyclerView, productlist));
     }
-
 
 
     // adapter to be changed.
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
-        private String[] mValues;
         private RecyclerView mRecyclerView;
         private List<Product> productdetials;
 
@@ -122,10 +98,9 @@ public class ImageListFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, String[] items, List<Product> words) {
-            mValues = items;
+        public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView, List<Product> products) {
             mRecyclerView = recyclerView;
-            productdetials = words;
+            productdetials = products;
         }
 
 
@@ -148,10 +123,10 @@ public class ImageListFragment extends Fragment {
         @SuppressLint("RecyclerView")
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            final Uri uri = Uri.parse(mValues[position]);
+            final Uri uri = Uri.parse(productdetials.get(position).getItemImageUrl());
             holder.mImageView.setImageURI(uri);
 
-            final String name = productdetials.get(position).getItemDesc();
+            final String name = productdetials.get(position).getItemName();
             final String price = productdetials.get(position).getItemPrice();
             final String desc = productdetials.get(position).getItemDesc();
 
@@ -163,14 +138,13 @@ public class ImageListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mActivity, ItemDetailsActivity.class);
-                    intent.putExtra(STRING_IMAGE_URI, mValues[position]);
+                    intent.putExtra(STRING_IMAGE_URI, productdetials.get(position).getItemImageUrl());
                     intent.putExtra(STRING_IMAGE_POSITION, position);
                     intent.putExtra("name", name);
                     intent.putExtra("price", price);
                     intent.putExtra("desc", desc);
 
                     mActivity.startActivity(intent);
-
                 }
             });
 
@@ -178,21 +152,21 @@ public class ImageListFragment extends Fragment {
             holder.mImageViewWishlist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                imageUrlUtils.addWishlistImageUri(mValues[position]);
+                    ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
+                    imageUrlUtils.addWishlistImageUri(productdetials.get(position).getItemImageUrl());
 
-                Product word = new Product();
-                word.setWishList(productdetials.get(position));
-                holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
-                notifyDataSetChanged();
-                Toast.makeText(mActivity,"Item added to Wishlist.",Toast.LENGTH_SHORT).show();
+                    Product word = new Product();
+                    word.setWishList(productdetials.get(position));
+                    holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
+                    notifyDataSetChanged();
+                    Toast.makeText(mActivity, "Item added to Wishlist.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return mValues.length;
+            return productdetials.size();
         }
     }
 }

@@ -13,7 +13,7 @@
     android:orientation="horizontal"
     android:weightSum="2">
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/search_image"
         android:layout_width="100dp"
         android:layout_height="80dp"

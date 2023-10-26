@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.model.Product;
-import com.allandroidprojects.ecomsample.model.SearchProduct;
+import com.allandroidprojects.ecomsample.fakedata.SearchProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,64 +51,60 @@ public class SearchResultActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-            handleIntent(getIntent());
+        handleIntent(getIntent());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.getItem(0);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setFocusable(true);
+        searchItem.expandActionView();
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            final List<Product> filterlist = listFilter(productitems, query);
+            adapter.setFilter(filterlist);
+            //use the query to search your data somehow
         }
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            MenuInflater inflater = getMenuInflater();
-            // Inflate menu to add items to action bar if it is present.
-            inflater.inflate(R.menu.search_menu, menu);
-            MenuItem searchItem = menu.getItem(0);
-
-            // Associate searchable configuration with the SearchView
-            SearchManager searchManager =
-                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView =
-                    (SearchView) menu.findItem(R.id.action_search).getActionView();
-            searchView.setSearchableInfo(
-                    searchManager.getSearchableInfo(getComponentName()));
-            searchView.setFocusable(true);
-            searchItem.expandActionView();
-            return true;
-        }
-
-        @Override
-        protected void onNewIntent(Intent intent) {
-            handleIntent(intent);
-        }
-
-        private void handleIntent(Intent intent) {
-
-            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-                String query = intent.getStringExtra(SearchManager.QUERY);
-
-                final List<Product> filterlist = listFilter(productitems, query);
-                adapter.setFilter(filterlist);
-                //use the query to search your data somehow
-            }
-        }
+    }
 
 
-
-
-    private List<Product> listFilter(List<Product> list, String query)
-    {
+    private List<Product> listFilter(List<Product> list, String query) {
         query = query.toLowerCase();
         final List<Product> filterModeList = new ArrayList<>();
 
-        for(Product item: list)
-        {
+        for (Product item : list) {
             final String name = item.getItemName().toLowerCase();
 
-            String [] tokens = name.split(" ");
+            String[] tokens = name.split(" ");
 
             String patternString = "\\b(" + StringUtils.join(tokens, "|") + ")\\b";
             Pattern pattern = Pattern.compile(patternString);
 
             Matcher matcher = pattern.matcher(query);
 
-            if(matcher.find())
-            {
+            if (matcher.find()) {
                 filterModeList.add(item);
             }
 
@@ -119,12 +115,4 @@ public class SearchResultActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-
-
-
-}// end of class;
+}

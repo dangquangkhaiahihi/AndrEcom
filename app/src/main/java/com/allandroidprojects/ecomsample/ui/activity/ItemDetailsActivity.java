@@ -10,10 +10,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.fakedata.CatData;
+import com.allandroidprojects.ecomsample.fakedata.DogData;
+import com.allandroidprojects.ecomsample.fakedata.ListProductData;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 import com.allandroidprojects.ecomsample.model.Product;
-import com.allandroidprojects.ecomsample.model.SearchProduct;
+import com.allandroidprojects.ecomsample.fakedata.SearchProduct;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -54,7 +57,25 @@ public class ItemDetailsActivity extends AppCompatActivity {
         TextView product_price = (TextView) findViewById(R.id.item_detail_price);
 
         LinearLayout Desc_Layout = (LinearLayout) findViewById(R.id.text_layout);
+        LinearLayout layoutWishList = (LinearLayout) findViewById(R.id.layout_action3);
+        LinearLayout layoutPhoneCall = (LinearLayout) findViewById(R.id.layout_phone_call);
         LinearLayout apriori_layout = (LinearLayout) findViewById(R.id.apriori);
+
+        layoutWishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO handle wishlist clicked
+                Toast.makeText(ItemDetailsActivity.this, "Wishlist clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        layoutPhoneCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO handle phone call dit me may
+                Toast.makeText(ItemDetailsActivity.this, "Phone clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //Getting image uri from previous screen
         if (getIntent() != null) {
@@ -68,36 +89,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
             boolean suggest = false;
 
-             if(name.equals("Red Party Dress")) {
-                 position = 10;
-                 suggest = true;
-             }
-             else  if(name.equals("Spring Outdoor cloth"))
-             {
-                 position = 9;
-                 suggest = true;
-             }
-             else if(name.equals("Sofa pillows"))
-             {
-                 position = 12;
-                 suggest = true;
-             }
-             else if(name.contentEquals("Double White Bed"))
-             {
-                 position = 14;
-                 suggest = true;
-             }
-             else if(name.contentEquals("Desktop Computer"))
-             {
-                 position = 7;
-                 suggest = true;
-             }
-             else if(name.contentEquals("Samsung Phone"))
-             {
-                 position = 6;
-                 suggest = true;
-             }
-             else position = 0;
+            List<Product> allData = new SearchProduct().getProductList();
+
+            for (Product product : allData) {
+                if (name.equals(product.getItemName())) {
+                    position = allData.indexOf(product);
+                    suggest = true;
+                }
+            }
 
             if(flag & suggest) {
                 Desc_Layout.setVisibility(View.GONE);

@@ -1,10 +1,7 @@
 package com.allandroidprojects.ecomsample.fakedata;
-
-
-import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.model.Product;
 
-public class DogData extends ListData {
+public class DogData extends ListProductData {
     public DogData()
     {
         super();
