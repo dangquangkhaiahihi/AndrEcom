@@ -166,59 +166,13 @@
                 android:background="@color/grey_light" />
 
 
-            <LinearLayout
-                android:id="@+id/apriori"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_apriori"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:weightSum="2">
-
-                <ImageView
-                    android:id="@+id/search_image"
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
-                    android:padding="0.75dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/first" />
-
-                <LinearLayout
-                    android:id="@+id/layout_item_desc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_weight="1.9"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/search_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Denim Shirt"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="bold" />
-
-
-                    <TextView
-                        android:id="@+id/search_desc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Slim fit, cotton hey brother hwo are you doing i am really good"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="12dp" />
-
-
-                    <TextView
-                        android:id="@+id/search_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="$ 20.01"
-                        android:textColor="#4CAF50" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:fadeScrollbars="true"
+                tools:itemCount="5"
+                tools:listitem="@layout/customitem" />
 
             <LinearLayout
                 android:id="@+id/text_layout"

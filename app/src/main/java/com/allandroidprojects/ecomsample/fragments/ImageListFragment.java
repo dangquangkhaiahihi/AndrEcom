@@ -155,8 +155,8 @@ public class ImageListFragment extends Fragment {
                     ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
                     imageUrlUtils.addWishlistImageUri(productdetials.get(position).getItemImageUrl());
 
-                    Product word = new Product();
-                    word.setWishList(productdetials.get(position));
+                    Product product = new Product();
+                    product.setWishList(productdetials.get(position));
                     holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
                     notifyDataSetChanged();
                     Toast.makeText(mActivity, "Item added to Wishlist.", Toast.LENGTH_SHORT).show();
