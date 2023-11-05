@@ -10,7 +10,7 @@
         <EditText
             android:id="@+id/txtUrname"
             android:layout_width="270dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
@@ -26,7 +26,7 @@
         <EditText
             android:id="@+id/txtPassword"
             android:layout_width="270dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_below="@id/txtUrname"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
@@ -35,7 +35,7 @@
             android:ems="10"
             android:gravity="fill_vertical"
             android:hint="   Password"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:textSize="16dp" />
 
 
@@ -61,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:text="Login Button"
+                            android:text="Login"
                             android:textColor="#fff"
                             android:textSize="18sp" />
                 </RelativeLayout>
