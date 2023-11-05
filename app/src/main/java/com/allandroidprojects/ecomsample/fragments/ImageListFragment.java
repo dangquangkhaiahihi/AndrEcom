@@ -2,6 +2,8 @@ package com.allandroidprojects.ecomsample.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +21,15 @@ import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.fakedata.CatData;
 import com.allandroidprojects.ecomsample.fakedata.DogData;
 import com.allandroidprojects.ecomsample.fakedata.ListProductData;
+import com.allandroidprojects.ecomsample.model.DBHelper;
 import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
 import com.allandroidprojects.ecomsample.ui.activity.MainActivity;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,10 +43,13 @@ public class ImageListFragment extends Fragment {
     public static ListProductData listData;
     public static List<Product> productlist;
 
+    public static DBHelper dbHelper; // Add this line
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
+        dbHelper = new DBHelper(getActivity()); // Initialize your database helper
     }
 
     @Override
@@ -49,22 +57,50 @@ public class ImageListFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.layout_recylerview_list, container, false);
 
         // call setuprecycleView
-        setupRecyclerView(rv);
+        try {
+            setupRecyclerView(rv);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return rv;
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
-        if (ImageListFragment.this.getArguments().getInt("type") == 1) {
-            listData = new DogData();
-            productlist = listData.getData();
-        } else if (ImageListFragment.this.getArguments().getInt("type") == 2) {
-            listData = new CatData();
-            productlist = listData.getData();
+    private void setupRecyclerView(RecyclerView recyclerView) throws IOException {
+        dbHelper.createDatabase(); // Ensure the database exists
 
-        }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        int type = getArguments().getInt("type");
+        List<Product> productlist = getProductsFromDatabase(type);
+
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(recyclerView, productlist));
+    }
+    private List<Product> getProductsFromDatabase(int type) {
+        List<Product> products = new ArrayList<>();
+        SQLiteDatabase database = dbHelper.openDatabase();
+
+        // Modify the SQL query based on your database structure
+        String tableName = (type == 1) ? "dog_products" : "cat_products"; // Adjust table names
+        String query = "SELECT * FROM " + tableName;
+
+        Cursor cursor = database.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Product product = new Product();
+                product.setItemName(cursor.getString(cursor.getColumnIndex("name")));
+                product.setItemPrice(cursor.getString(cursor.getColumnIndex("price")));
+                product.setItemDesc(cursor.getString(cursor.getColumnIndex("description")));
+                product.setItemImageUrl(cursor.getString(cursor.getColumnIndex("image_url")));
+
+                products.add(product);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        database.close();
+
+        return products;
     }
 
 
