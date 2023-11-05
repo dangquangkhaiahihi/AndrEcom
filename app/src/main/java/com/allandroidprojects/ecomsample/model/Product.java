@@ -1,13 +1,60 @@
 package com.allandroidprojects.ecomsample.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 
+@Entity
 public class Product {
+    @PrimaryKey
+    private int id;
 
     private String name;
     private String desc;
     private String price;
     private String imageUrl;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public static void setWishList(ArrayList<Product> wishList) {
+        Product.wishList = wishList;
+    }
+
+    public static void setCartList(ArrayList<Product> cartList) {
+        Product.cartList = cartList;
+    }
+
     private String phone;
 
     static ArrayList<Product> wishList = new ArrayList<>();
@@ -68,6 +115,14 @@ public class Product {
     }
 
 // setter methods
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setItemName(String name) {
         this.name = name;
