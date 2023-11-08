@@ -23,6 +23,7 @@ import com.allandroidprojects.ecomsample.dao.LogedInUser;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.model.User;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
+import com.allandroidprojects.ecomsample.notification.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity
 
         String productInCartStr = loggedinUser.getCartItemIdComma();
         if(!productInCartStr.equals("")) {
+            NotificationHelper.showNotification(this, "CHECK YOUR CART", "Have item in cart");
             List<String> idProductInCart = new ArrayList<>(Arrays.asList(productInCartStr.split(",")));
             notificationCountCart = idProductInCart.size();
         }
