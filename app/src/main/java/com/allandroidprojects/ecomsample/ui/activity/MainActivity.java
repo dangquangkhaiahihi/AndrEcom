@@ -15,12 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.dao.LogedInUser;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
+import com.allandroidprojects.ecomsample.model.User;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -48,6 +53,18 @@ public class MainActivity extends AppCompatActivity
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView userFullname = (TextView) headerView.findViewById(R.id.user_name);
+
+        User loggedinUser = LogedInUser.getUser();
+        userFullname.setText(loggedinUser.getFullname());
+
+        String productInCartStr = loggedinUser.getCartItemIdComma();
+        if(!productInCartStr.equals("")) {
+            List<String> idProductInCart = new ArrayList<>(Arrays.asList(productInCartStr.split(",")));
+            notificationCountCart = idProductInCart.size();
+        }
 
         if (viewPager != null) {
             setupViewPager(viewPager);

@@ -52,6 +52,9 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
         final String price = productOriginal.get(position).getItemPrice();
         final String desc = productOriginal.get(position).getItemDesc();
         final Uri uri = Uri.parse(productOriginal.get(position).getItemImageUrl());
+        final String category = productOriginal.get(position).getCategory();
+        final String id = productOriginal.get(position).getId().toString();
+        final String phone = productOriginal.get(position).getPhone();
 
         holder.itemImage.setImageURI(uri);
         holder.itemName.setText(name);
@@ -70,7 +73,9 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
                 intent.putExtra("name", name);
                 intent.putExtra("price", price);
                 intent.putExtra("desc", desc);
-                intent.putExtra("flag", flag);
+                intent.putExtra("category", category);
+                intent.putExtra("id", id);
+                intent.putExtra("phone", phone);
 
                 context.startActivity(intent);
             }

@@ -25,4 +25,6 @@ public interface ProductDao {
     @Query("SELECT * FROM product WHERE category = :category")
     public List<Product> getItemByCategory(String category);
 
+    @Query("SELECT * FROM product WHERE id = :id")
+    public Product getItemById(Long id);
 }

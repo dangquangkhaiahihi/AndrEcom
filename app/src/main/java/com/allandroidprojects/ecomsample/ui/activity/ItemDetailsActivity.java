@@ -12,26 +12,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
 import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.LogedInUser;
 import com.allandroidprojects.ecomsample.dao.ProductDao;
+import com.allandroidprojects.ecomsample.dao.UserDao;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.model.Product;
+import com.allandroidprojects.ecomsample.model.User;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ItemDetailsActivity extends AppCompatActivity {
-    int imagePosition;
+    int position;
     String stringImageUri;
 
     private static final int CALL_PHONE_PERMISSION_REQUEST_CODE = 123;
@@ -40,9 +44,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private String price;
     private String desc;
     private String phone;
-    private Product product;
     private String category;
-    private Long id;
+    private String id;
 
     List<Product> productitems = new ArrayList<>();
 
@@ -72,7 +75,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stringImageUri = getIntent().getStringExtra(ImageListFragment.STRING_IMAGE_URI);
-                imagePosition = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
+                position = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
                 name = getIntent().getStringExtra("name");
                 price = getIntent().getStringExtra("price");
                 phone = getIntent().getStringExtra("phone");
@@ -98,15 +101,13 @@ public class ItemDetailsActivity extends AppCompatActivity {
         //Getting image uri from previous screen
         if (getIntent() != null) {
             stringImageUri = getIntent().getStringExtra(ImageListFragment.STRING_IMAGE_URI);
-            imagePosition = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
-            id = getIntent().getLongExtra("id", 1);
+            position = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
+            id = getIntent().getStringExtra("id");
             name = getIntent().getStringExtra("name");
             price = getIntent().getStringExtra("price");
             phone = getIntent().getStringExtra("phone");
             desc = getIntent().getStringExtra("desc");
             category = getIntent().getStringExtra("category");
-
-            product = new Product(name, desc, price, stringImageUri, phone);
 
             productitems = productDao.getItemByCategory(category);
 
@@ -127,12 +128,29 @@ public class ItemDetailsActivity extends AppCompatActivity {
         textViewAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                imageUrlUtils.addCartListImageUri(stringImageUri);
-                product.setCartList(product);
+                User logedInUser = LogedInUser.getUser();
+                String strIdCartItems = logedInUser.getCartItemIdComma();
+                List<String> idProductInCart = new ArrayList<>();
+                String idStr = getIntent().getStringExtra("id");
+
+                if(strIdCartItems.equals("")) {
+                    idProductInCart.add(idStr);
+                } else {
+                    idProductInCart = new ArrayList<>(Arrays.asList(strIdCartItems.split(",")));
+                    idProductInCart.add(idStr);
+                }
+
+                String joinedCart = idProductInCart.stream().collect(Collectors.joining(","));
+                logedInUser.setCartItemIdComma(joinedCart);
+                LogedInUser.setUser(logedInUser);
+
+                mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                UserDao userDao = mDb.getUserDAO();
+
+                userDao.update(logedInUser);
 
                 Toast.makeText(ItemDetailsActivity.this, "Item added to cart.", Toast.LENGTH_SHORT).show();
-                MainActivity.notificationCountCart++;
+                MainActivity.notificationCountCart = idProductInCart.size();
                 NotificationCountSetClass.setNotifyCount(MainActivity.notificationCountCart);
             }
         });
@@ -161,7 +179,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     private void makePhoneCall() {
         // Replace "0559261020" with the actual phone number
-        String phoneNumber = "tel:" + "0559261020";
+        String phoneNumber = "tel:" + phone;
 
         // Create an implicit intent to make a phone call
         Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));

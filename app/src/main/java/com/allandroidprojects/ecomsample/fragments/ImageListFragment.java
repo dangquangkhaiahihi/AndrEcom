@@ -127,7 +127,8 @@ public class ImageListFragment extends Fragment {
             final String price = productdetials.get(position).getItemPrice();
             final String desc = productdetials.get(position).getItemDesc();
             final String category = productdetials.get(position).getCategory();
-            final Long id = productdetials.get(position).getId();
+            final String id = productdetials.get(position).getId().toString();
+            final String phone = productdetials.get(position).getPhone();
 
             holder.textView.setText(name);
             holder.textViewDesc.setText(desc);
@@ -144,6 +145,7 @@ public class ImageListFragment extends Fragment {
                     intent.putExtra("desc", desc);
                     intent.putExtra("category", category);
                     intent.putExtra("id", id);
+                    intent.putExtra("phone", phone);
 
                     mActivity.startActivity(intent);
                 }

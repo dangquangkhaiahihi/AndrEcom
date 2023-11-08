@@ -31,7 +31,7 @@ public class PetApplication extends Application {
                 "Friendly and outgoing nature. Intelligent and versatile dogs.",
                 "$800",
                 "https://images.pexels.com/photos/1739095/pexels-photo-1739095.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                "0559261020",
+                "12345",
                 "dog"
         ));
         productDao.insert(new Product(2,
@@ -108,7 +108,7 @@ public class PetApplication extends Application {
         ));
 
         UserDao userDao = mDb.getUserDAO();
-        userDao.insert(new User("admin@gmail.com","ADMIN","admin", "123456", "1,2,3"));
+        userDao.insert(new User("admin@gmail.com","ADMIN","admin", "123456", ""));
 
         Fresco.initialize(this, ImagePipelineConfigFactory.getImagePipelineConfig(this));
     }

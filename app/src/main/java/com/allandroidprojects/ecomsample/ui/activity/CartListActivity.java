@@ -16,17 +16,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.LogedInUser;
+import com.allandroidprojects.ecomsample.dao.ProductDao;
+import com.allandroidprojects.ecomsample.dao.UserDao;
 import com.allandroidprojects.ecomsample.model.Product;
+import com.allandroidprojects.ecomsample.model.User;
 import com.allandroidprojects.ecomsample.utility.ImageUrlUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_POSITION;
 import static com.allandroidprojects.ecomsample.fragments.ImageListFragment.STRING_IMAGE_URI;
 
 public class CartListActivity extends AppCompatActivity {
     private static Context mContext;
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +43,34 @@ public class CartListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart_list);
         mContext = CartListActivity.this;
 
-        ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-        ArrayList<String> cartlistImageUri =imageUrlUtils.getCartListImageUri();
+        ArrayList<Product> productsInCart = new ArrayList<>();
 
-        Product product = new Product();
-        ArrayList<Product> list = product.getCartList();
+        User logedInUser = LogedInUser.getUser();
+        String productInCartStr = logedInUser.getCartItemIdComma();
+        Integer totalNum = 0;
 
+        if (!productInCartStr.equals("")) {
+            List<Long> idList = new ArrayList<>();
 
+            List<String> idProductInCart = new ArrayList<>(Arrays.asList(productInCartStr.split(",")));
+
+            for (String element : idProductInCart) {
+                Long longValue = Long.parseLong(element);
+                idList.add(longValue);
+            }
+
+            mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
+            ProductDao productDao = mDb.getProductDAO();
+
+            for (Long id : idList) {
+                Product product = productDao.getItemById(id);
+                totalNum += Integer.parseInt(product.getPrice().replace("$", ""));
+                productsInCart.add(product);
+            }
+        }
+
+        TextView textViewTotal = (TextView) findViewById(R.id.text_action_bottom1);
+        textViewTotal.setText("$" + totalNum);
 
         //Show cart layout based on items
         setCartLayout();
@@ -49,15 +79,17 @@ public class CartListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager recylerViewLayoutManager = new LinearLayoutManager(mContext);
 
         recyclerView.setLayoutManager(recylerViewLayoutManager);
-        recyclerView.setAdapter(new CartListActivity.SimpleStringRecyclerViewAdapter(recyclerView, cartlistImageUri, list));
+        recyclerView.setAdapter(new CartListActivity.SimpleStringRecyclerViewAdapter(recyclerView, productsInCart, totalNum, textViewTotal));
     }
 
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder> {
 
-        private ArrayList<String> mCartlistImageUri;
-        private ArrayList<Product> wordDetails;
+        private ArrayList<Product> productsInCart;
         private RecyclerView mRecyclerView;
+        private TextView textTotal;
+        private AppDatabase mDb;
+        private Integer totalNum;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
@@ -79,11 +111,11 @@ public class CartListActivity extends AppCompatActivity {
         }
 
         public SimpleStringRecyclerViewAdapter(RecyclerView recyclerView,
-                                               ArrayList<String> wishlistImageUri,
-                                               ArrayList<Product> listitem) {
-            mCartlistImageUri = wishlistImageUri;
-            mRecyclerView = recyclerView;
-            wordDetails = listitem;
+                                               ArrayList<Product> productsInCart, Integer totalNum, TextView totalTextView) {
+            this.mRecyclerView = recyclerView;
+            this.productsInCart = productsInCart;
+            this.totalNum = totalNum;
+            this.textTotal = totalTextView;
         }
 
         @Override
@@ -105,27 +137,32 @@ public class CartListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final CartListActivity.SimpleStringRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            final Uri uri = Uri.parse(mCartlistImageUri.get(position));
-            holder.mImageView.setImageURI(uri);
-
-            final String name = wordDetails.get(position).getItemName();
-            final String price = wordDetails.get(position).getItemPrice();
-            final String desc = wordDetails.get(position).getItemDesc();
+            final String name = productsInCart.get(position).getItemName();
+            final String price = productsInCart.get(position).getItemPrice();
+            final String desc = productsInCart.get(position).getItemDesc();
+            final String uri = productsInCart.get(position).getItemImageUrl();
+            final String category = productsInCart.get(position).getCategory();
+            final String id = productsInCart.get(position).getId().toString();
+            final String phone = productsInCart.get(position).getPhone();
 
             holder.textViewName.setText(name);
             holder.textViewDesc.setText(desc);
             holder.textViewPrice.setText(price);
+            holder.mImageView.setImageURI(uri);
 
             holder.mLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ItemDetailsActivity.class);
-                    intent.putExtra(STRING_IMAGE_URI,mCartlistImageUri.get(position));
-                    intent.putExtra(STRING_IMAGE_POSITION, position);
 
+                    intent.putExtra(STRING_IMAGE_URI, uri);
+                    intent.putExtra(STRING_IMAGE_POSITION, position);
                     intent.putExtra("name", name);
                     intent.putExtra("price", price);
                     intent.putExtra("desc", desc);
+                    intent.putExtra("category", category);
+                    intent.putExtra("id", id);
+                    intent.putExtra("phone", phone);
 
                     mContext.startActivity(intent);
                 }
@@ -135,14 +172,30 @@ public class CartListActivity extends AppCompatActivity {
             holder.mLayoutRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ImageUrlUtils imageUrlUtils = new ImageUrlUtils();
-                    imageUrlUtils.removeCartListImageUri(position);
-                    Product product = new Product();
-                    product.removeFromCart(position);
+                    User logedInUser = LogedInUser.getUser();
+                    String strIdCartItems = logedInUser.getCartItemIdComma();
+                    List<String> idProductInCart = new ArrayList<>(Arrays.asList(strIdCartItems.split(",")));
+
+                    TextView textViewTotal = (TextView) textTotal.findViewById(R.id.text_action_bottom1);
+                    totalNum -= Integer.parseInt(productsInCart.get(position).getPrice().replace("$", ""));
+                    textViewTotal.setText("$" + totalNum);
+
+                    idProductInCart.remove(position);
+                    productsInCart.remove(position);
+
+                    String joinedCart = idProductInCart.stream().collect(Collectors.joining(","));
+                    logedInUser.setCartItemIdComma(joinedCart);
+                    LogedInUser.setUser(logedInUser);
+
+                    mDb = AppDatabase.getInMemoryDatabase(mContext.getApplicationContext());
+                    UserDao userDao = mDb.getUserDAO();
+
+                    userDao.update(logedInUser);
+
                     notifyDataSetChanged();
                     //Decrease notification count
-                    MainActivity.notificationCountCart--;
 
+                    MainActivity.notificationCountCart--;
                 }
             });
 
@@ -156,7 +209,7 @@ public class CartListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mCartlistImageUri.size();
+            return productsInCart.size();
         }
     }
 
