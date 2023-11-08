@@ -12,8 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.ProductDao;
 import com.allandroidprojects.ecomsample.model.Product;
-import com.allandroidprojects.ecomsample.fakedata.SearchProduct;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -25,17 +26,13 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
     public static final String STRING_IMAGE_URI = "ImageUri";
     public static final String STRING_IMAGE_POSITION = "ImagePosition";
 
-    SearchProduct products = new SearchProduct();
-    List<Product> productOriginal = products.getProductList();
-
-    int newposition;
-
-
-    private List<Product> productlist;
+    private List<Product> productOriginal;
     private Context context;
 
+    private AppDatabase mDb;
+
     public SearchAdapterActivity(List<Product> items, Context context) {
-        productlist = items;
+        productOriginal = items;
         this.context = context;
     }
 
@@ -49,22 +46,18 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
     @Override
     public void onBindViewHolder(Holderview holder, @SuppressLint("RecyclerView") final int position) {
 
-        final Uri uri = Uri.parse(productlist.get(position).getItemImageUrl());
+        mDb = AppDatabase.getInMemoryDatabase(context.getApplicationContext());
+
+        final String name = productOriginal.get(position).getItemName();
+        final String price = productOriginal.get(position).getItemPrice();
+        final String desc = productOriginal.get(position).getItemDesc();
+        final Uri uri = Uri.parse(productOriginal.get(position).getItemImageUrl());
+
         holder.itemImage.setImageURI(uri);
-        holder.itemName.setText(productlist.get(position).getItemName());
-        holder.itemDesc.setText(productlist.get(position).getItemDesc());
-        holder.itemPrice.setText("$ " + productlist.get(position).getItemPrice());
+        holder.itemName.setText(name);
+        holder.itemDesc.setText(desc);
+        holder.itemPrice.setText(price);
 
-        for (int i = 0; i < productOriginal.size(); i++) {
-            String name = productOriginal.get(i).getItemName();
-            if (productlist.get(position).getItemName().equals(name)) {
-                newposition = i;
-            }
-        }
-
-        final String name = productlist.get(position).getItemName();
-        final String price = productlist.get(position).getItemPrice();
-        final String desc = productlist.get(position).getItemDesc();
         final boolean flag = true;
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -72,37 +65,31 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ItemDetailsActivity.class);
-                intent.putExtra(STRING_IMAGE_URI, productlist.get(position).getItemImageUrl());
+                intent.putExtra(STRING_IMAGE_URI, productOriginal.get(position).getItemImageUrl());
                 intent.putExtra(STRING_IMAGE_POSITION, position);
                 intent.putExtra("name", name);
                 intent.putExtra("price", price);
                 intent.putExtra("desc", desc);
                 intent.putExtra("flag", flag);
-                intent.putExtra("position", newposition);
 
                 context.startActivity(intent);
-
             }
-
         });
-
-
     }
 
 
     @Override
     public int getItemCount() {
-        return productlist.size();
+        return productOriginal.size();
     }
 
     public void setFilter(List<Product> items) {
-        productlist = new ArrayList<>();
-        productlist.addAll(items);
+        productOriginal = new ArrayList<>();
+        productOriginal.addAll(items);
         notifyDataSetChanged();
     }
 
     class Holderview extends RecyclerView.ViewHolder {
-
         SimpleDraweeView itemImage;
         TextView itemName;
         TextView itemDesc;
@@ -111,7 +98,6 @@ public class SearchAdapterActivity extends RecyclerView.Adapter<SearchAdapterAct
 
         Holderview(View itemview) {
             super(itemview);
-
             itemImage = (SimpleDraweeView) itemview.findViewById(R.id.search_image);
             itemName = (TextView) itemview.findViewById(R.id.search_name);
             itemDesc = (TextView) itemview.findViewById(R.id.search_desc);

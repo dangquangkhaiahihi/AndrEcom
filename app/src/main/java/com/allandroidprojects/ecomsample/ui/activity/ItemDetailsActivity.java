@@ -18,7 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.fakedata.SearchProduct;
+import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.ProductDao;
 import com.allandroidprojects.ecomsample.fragments.ImageListFragment;
 import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.notification.NotificationCountSetClass;
@@ -35,25 +36,25 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     private static final int CALL_PHONE_PERMISSION_REQUEST_CODE = 123;
 
-    public static final String STRING_IMAGE_URI = "ImageUri";
-    public static final String STRING_IMAGE_POSITION = "ImagePosition";
-
     private String name;
     private String price;
     private String desc;
     private String phone;
     private Product product;
+    private String category;
+    private Long id;
 
-    SearchProduct products = new SearchProduct();
     List<Product> productitems = new ArrayList<>();
 
     SearchAdapterActivity adapter;
-
-    int position = -1;
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        ProductDao productDao = mDb.getProductDAO();
+
         setContentView(R.layout.activity_item_details);
         SimpleDraweeView mImageView = (SimpleDraweeView) findViewById(R.id.image1);
         TextView textViewAddToCart = (TextView) findViewById(R.id.text_action_bottom1);
@@ -83,7 +84,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 Product product = new Product(name, desc, price, stringImageUri, phone);
                 product.setWishList(product);
 
-//                holder.mImageViewWishlist.setImageResource(R.drawable.ic_favorite_black_18dp);
                 Toast.makeText(ItemDetailsActivity.this, "Item added to Wishlist.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -99,32 +99,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
         if (getIntent() != null) {
             stringImageUri = getIntent().getStringExtra(ImageListFragment.STRING_IMAGE_URI);
             imagePosition = getIntent().getIntExtra(ImageListFragment.STRING_IMAGE_POSITION, 0);
+            id = getIntent().getLongExtra("id", 1);
             name = getIntent().getStringExtra("name");
             price = getIntent().getStringExtra("price");
             phone = getIntent().getStringExtra("phone");
             desc = getIntent().getStringExtra("desc");
-            Boolean flag = getIntent().getBooleanExtra("flag", false);
-
-            boolean suggest = false;
-
-            List<Product> allData = new SearchProduct().getProductList();
-
-//            for (Product product : allData) {
-//                if (name.equals(product.getItemName())) {
-//                    position = allData.indexOf(product);
-//                    suggest = true;
-//                }
-//            }
-//
-//            if (flag & suggest) {
-//                Desc_Layout.setVisibility(View.GONE);
-//            } else {
-//                rvApriori.setVisibility(View.GONE);
-//            }
+            category = getIntent().getStringExtra("category");
 
             product = new Product(name, desc, price, stringImageUri, phone);
 
-            productitems = products.getProductList();
+            productitems = productDao.getItemByCategory(category);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             rvApriori.setLayoutManager(linearLayoutManager);
@@ -135,8 +119,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         product_names.setText(name);
         product_price.setText(price);
         item_detail_name.setText(desc);
-
-        final boolean flagg = false;
 
 
         Uri uri = Uri.parse(stringImageUri);

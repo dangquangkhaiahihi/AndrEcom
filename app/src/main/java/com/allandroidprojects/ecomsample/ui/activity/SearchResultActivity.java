@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.widget.Toast;
 
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,8 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.allandroidprojects.ecomsample.R;
+import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.ProductDao;
 import com.allandroidprojects.ecomsample.model.Product;
-import com.allandroidprojects.ecomsample.fakedata.SearchProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,9 @@ public class SearchResultActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SearchAdapterActivity adapter;
 
-
-    SearchProduct products = new SearchProduct();
     List<Product> productitems;
 
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,9 @@ public class SearchResultActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.listshow);
         recyclerView.setHasFixedSize(true);
 
-        productitems = products.getProductList();
+        mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        ProductDao productDao = mDb.getProductDAO();
+        productitems = productDao.getAllProducts();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -62,12 +65,9 @@ public class SearchResultActivity extends AppCompatActivity {
         MenuItem searchItem = menu.getItem(0);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setFocusable(true);
         searchItem.expandActionView();
         return true;
@@ -79,40 +79,13 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            final List<Product> filterlist = listFilter(productitems, query);
-            adapter.setFilter(filterlist);
-            //use the query to search your data somehow
+            Toast.makeText(SearchResultActivity.this, query, Toast.LENGTH_SHORT).show();
+            mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
+            ProductDao productDao = mDb.getProductDAO();
+            final List<Product> filterList =  productDao.searchByKeyword(query);
+            adapter.setFilter(filterList);
         }
     }
-
-
-    private List<Product> listFilter(List<Product> list, String query) {
-        query = query.toLowerCase();
-        final List<Product> filterModeList = new ArrayList<>();
-
-        for (Product item : list) {
-            final String name = item.getItemName().toLowerCase();
-
-            String[] tokens = name.split(" ");
-
-            String patternString = "\\b(" + StringUtils.join(tokens, "|") + ")\\b";
-            Pattern pattern = Pattern.compile(patternString);
-
-            Matcher matcher = pattern.matcher(query);
-
-            if (matcher.find()) {
-                filterModeList.add(item);
-            }
-
-        }
-
-
-        return filterModeList;
-
-    }
-
 }

@@ -16,9 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allandroidprojects.ecomsample.R;
-import com.allandroidprojects.ecomsample.fakedata.CatData;
-import com.allandroidprojects.ecomsample.fakedata.DogData;
-import com.allandroidprojects.ecomsample.fakedata.ListProductData;
+import com.allandroidprojects.ecomsample.dao.AppDatabase;
+import com.allandroidprojects.ecomsample.dao.ProductDao;
 import com.allandroidprojects.ecomsample.model.Product;
 import com.allandroidprojects.ecomsample.ui.activity.ItemDetailsActivity;
 import com.allandroidprojects.ecomsample.ui.activity.MainActivity;
@@ -34,9 +33,9 @@ public class ImageListFragment extends Fragment {
     public static final String STRING_IMAGE_POSITION = "ImagePosition";
     private static MainActivity mActivity;
 
-
-    public static ListProductData listData;
     public static List<Product> productlist;
+
+    private AppDatabase mDb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,20 +46,18 @@ public class ImageListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.layout_recylerview_list, container, false);
-
-        // call setuprecycleView
         setupRecyclerView(rv);
         return rv;
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        if (ImageListFragment.this.getArguments().getInt("type") == 1) {
-            listData = new DogData();
-            productlist = listData.getData();
-        } else if (ImageListFragment.this.getArguments().getInt("type") == 2) {
-            listData = new CatData();
-            productlist = listData.getData();
+        mDb = AppDatabase.getInMemoryDatabase(getContext().getApplicationContext());
+        ProductDao productDao = mDb.getProductDAO();
 
+        if (ImageListFragment.this.getArguments().getInt("type") == 1) {
+            productlist = productDao.getItemByCategory("dog");
+        } else if (ImageListFragment.this.getArguments().getInt("type") == 2) {
+            productlist = productDao.getItemByCategory("cat");
         }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -129,6 +126,8 @@ public class ImageListFragment extends Fragment {
             final String name = productdetials.get(position).getItemName();
             final String price = productdetials.get(position).getItemPrice();
             final String desc = productdetials.get(position).getItemDesc();
+            final String category = productdetials.get(position).getCategory();
+            final Long id = productdetials.get(position).getId();
 
             holder.textView.setText(name);
             holder.textViewDesc.setText(desc);
@@ -143,6 +142,8 @@ public class ImageListFragment extends Fragment {
                     intent.putExtra("name", name);
                     intent.putExtra("price", price);
                     intent.putExtra("desc", desc);
+                    intent.putExtra("category", category);
+                    intent.putExtra("id", id);
 
                     mActivity.startActivity(intent);
                 }

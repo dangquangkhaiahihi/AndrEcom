@@ -7,13 +7,15 @@ import java.util.ArrayList;
 
 @Entity
 public class Product {
-    @PrimaryKey
-    private int id;
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
 
     private String name;
     private String desc;
     private String price;
     private String imageUrl;
+
+    private String category;
 
     public String getName() {
         return name;
@@ -71,6 +73,23 @@ public class Product {
         this.phone = phone;
     }
 
+    public Product(Integer id, String name, String desc, String price, String url, String phone, String category) {
+        this.name = name;
+        this.desc = desc;
+        this.price = price;
+        this.imageUrl = url;
+        this.phone = phone;
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     // getter methods
     public String getItemName() {
         return name;
@@ -116,11 +135,12 @@ public class Product {
 
 // setter methods
 
-    public int getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
