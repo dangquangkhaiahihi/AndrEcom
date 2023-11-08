@@ -18,7 +18,7 @@
             android:drawableLeft="@drawable/ic_action_name"
             android:ems="10"
             android:gravity="fill_vertical"
-            android:hint="   User Name"
+            android:hint="Username"
             android:inputType="textPersonName"
             android:textSize="16dp" />
 
@@ -34,7 +34,7 @@
             android:drawableLeft="@drawable/ic_action_lock"
             android:ems="10"
             android:gravity="fill_vertical"
-            android:hint="   Password"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textSize="16dp" />
 
