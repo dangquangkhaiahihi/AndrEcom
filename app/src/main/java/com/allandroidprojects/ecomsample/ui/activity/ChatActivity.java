@@ -1,4 +1,5 @@
-package com.allandroidprojects.ecomsample.ui.activity;// Đoạn mã trong file ChatActivity.java
+package com.allandroidprojects.ecomsample.ui.activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +34,8 @@ public class ChatActivity extends AppCompatActivity {
         username = intent.getStringExtra("username");
         senderTextView.setText("Please chat with me if you got some problem " + username);
 
-        webSocketManager = new WebSocketManager(this); // Truyền ChatActivity vào WebSocketManager
+        webSocketManager = new WebSocketManager(this);
+        webSocketManager.requestChatHistory();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,19 +45,39 @@ public class ChatActivity extends AppCompatActivity {
                     webSocketManager.sendMessage(message);
                     messageEditText.setText("");
 
-                    // Hiển thị tin nhắn ngay lập tức trên TextView
+                    // Display the sent message immediately in chatTextView
                     showMessage("You: " + message);
                 }
             }
         });
     }
 
-    // Phương thức để hiển thị tin nhắn trên TextViewHiH
+    // Method to display a message in chatTextView
     public void showMessage(final String message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // Append the new message to the existing text
                 chatTextView.append(message + "\n");
+            }
+        });
+    }
+    // Method to display the chat history in chatTextView
+    public void showChatHistory(final String chatHistory) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatTextView.setText(chatHistory);
+            }
+        });
+    }
+
+    // Method to display a message received from the server
+    public void showAdminMessage(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatTextView.append("Admin: " + message + "\n");
             }
         });
     }
