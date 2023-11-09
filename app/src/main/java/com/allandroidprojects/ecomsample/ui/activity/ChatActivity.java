@@ -40,19 +40,18 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = messageEditText.getText().toString();
+                String message = username+ ": " + messageEditText.getText().toString();
                 if (!message.isEmpty()) {
-                    webSocketManager.sendMessage(message);
+                    webSocketManager.sendMessage("You: " + message);
                     messageEditText.setText("");
 
-                    // Display the sent message immediately in chatTextView
-                    showMessage("You: " + message);
+                    showMessage(message);
                 }
             }
         });
     }
 
-    // Method to display a message in chatTextView
+    // Display a message in chatTextView
     public void showMessage(final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -62,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-    // Method to display the chat history in chatTextView
+    // Display the chat history in chatTextView
     public void showChatHistory(final String chatHistory) {
         runOnUiThread(new Runnable() {
             @Override

@@ -26,12 +26,6 @@ public class WebSocketManager extends WebSocketListener {
     }
 
     @Override
-    public void onOpen(WebSocket webSocket, Response response) {
-        super.onOpen(webSocket, response);
-        // Handle when the connection is opened
-    }
-
-    @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
         // Handle when a text message is received
@@ -45,16 +39,24 @@ public class WebSocketManager extends WebSocketListener {
         // Concatenate all messages into a single string
         StringBuilder allMessages = new StringBuilder();
         for (String message : messageList) {
-            allMessages.append(message).append("\n");
+            if (message.startsWith("You")) {
+                // Keep other messages unchanged
+                allMessages.append(message.substring(5)).append("\n");
+            } else {
+                // Add "Admin" prefix to your messages
+                allMessages.append("Admin: ").append(message).append("\n");
+            }
         }
         return allMessages.toString();
     }
 
     public void requestChatHistory() {
-        webSocket.send("request_chat_history");
+        // First Hello
+        webSocket.send("How can I help you bro!!!!");
     }
 
     public void sendMessage(String message) {
+        // Add "You" prefix to your messages
         webSocket.send(message);
     }
 
