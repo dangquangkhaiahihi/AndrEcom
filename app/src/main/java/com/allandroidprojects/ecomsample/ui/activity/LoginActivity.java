@@ -39,17 +39,20 @@ public class LoginActivity extends AppCompatActivity {
         CardView view = (CardView) findViewById(R.id.btnlogin);
 
         view.setOnClickListener(v -> {
-//            String username = txtUrname.getText().toString();
-//            String password = txtPassword.getText().toString();
+            String username = txtUrname.getText().toString();
+            String password = txtPassword.getText().toString();
             mDb = AppDatabase.getInMemoryDatabase(getApplicationContext());
             UserDao userDao = mDb.getUserDAO();
-            User user = userDao.searchByUsername("admin");
-//            if (user == null) return;
-//
-//            if(password.equals(user.getPassword())) {
+            User user = userDao.searchByUsername(username);
+            if (user == null) return;
+
+            if(password.equals(user.getPassword())) {
                 LogedInUser.setUser(user);
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//            }
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("cus_name", user.getFullname());
+                startActivity(intent);
+                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
         });
 
     }

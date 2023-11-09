@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         TextView userFullname = (TextView) headerView.findViewById(R.id.user_name);
 
+        Intent intent = getIntent();
+        String fullName = intent.getStringExtra("cus_name");
+        userFullname.setText(fullName);
         User loggedinUser = LogedInUser.getUser();
         userFullname.setText(loggedinUser.getFullname());
 
