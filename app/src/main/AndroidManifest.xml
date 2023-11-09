@@ -39,6 +39,10 @@
             android:label="Product Details"
             android:parentActivityName=".ui.activity.MainActivity" />
         <activity
+            android:name=".ui.activity.ChatActivity"
+            android:label="Chat"
+            android:parentActivityName=".ui.activity.MainActivity" />
+        <activity
             android:name=".ui.activity.WishlistActivity"
             android:label="@string/my_wishlist"
             android:parentActivityName=".ui.activity.MainActivity" />

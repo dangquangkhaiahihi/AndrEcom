@@ -109,7 +109,7 @@ public class PetApplication extends Application {
 
         UserDao userDao = mDb.getUserDAO();
         userDao.insert(new User("admin@gmail.com","ADMIN","admin", "123456", "1,2,3"));
-
+        userDao.insert(new User("hoanganh@gmail.com","Hoàng Anh","hoanganh", "123456", "1,2,3"));
         Fresco.initialize(this, ImagePipelineConfigFactory.getImagePipelineConfig(this));
     }
 

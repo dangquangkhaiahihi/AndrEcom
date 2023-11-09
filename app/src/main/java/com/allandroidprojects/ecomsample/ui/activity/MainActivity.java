@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.allandroidprojects.ecomsample.R;
@@ -63,6 +64,16 @@ public class MainActivity extends AppCompatActivity
         userFullname.setText(fullName);
         User loggedinUser = LogedInUser.getUser();
         userFullname.setText(loggedinUser.getFullname());
+
+        Button chatButton = (Button) headerView.findViewById(R.id.btnChat);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
+                chatIntent.putExtra("username", loggedinUser.getFullname());
+                startActivity(chatIntent);
+            }
+        });
 
         String productInCartStr = loggedinUser.getCartItemIdComma();
         if(!productInCartStr.equals("")) {

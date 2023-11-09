@@ -20,6 +20,12 @@
         app:srcCompat="@drawable/profile"
         android:id="@+id/imageView" />
 
+    <Button
+        android:id="@+id/btnChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chat with admin"/>
+
     <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
